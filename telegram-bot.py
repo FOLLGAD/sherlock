@@ -1,3 +1,4 @@
+from telegram.ext import ContextTypes, MessageHandler, filters, ApplicationBuilder, Application
 from io import BytesIO
 import openai
 import requests
@@ -16,7 +17,7 @@ load_dotenv()
 
 # import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
-from telegram.ext import ContextTypes, MessageHandler, filters, ApplicationBuilder, Application
+
 
 class ChatBot:
     app: Application = None
@@ -26,7 +27,8 @@ class ChatBot:
 
         self.app.add_handler(MessageHandler(filters.TEXT, self.handle_text))
         self.app.add_handler(MessageHandler(filters.PHOTO, self.handle_photo))
-        self.app.add_handler(MessageHandler(filters.AUDIO | filters.VOICE, self.handle_audio))
+        self.app.add_handler(MessageHandler(
+            filters.AUDIO | filters.VOICE, self.handle_audio))
 
     def download_file(self, file_path):
         url = file_path
@@ -36,14 +38,19 @@ class ChatBot:
         return filename
 
     async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        response = chat(update.message.text)
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        task = asyncio.create_task(chat(update.message.text))
+        await asyncio.sleep(0)
+
+        await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=await task)
 
     async def handle_photo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Photo received!")
 
     async def handle_audio(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         # use whisper to transcribe audio
+
+        await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
 
         # get the audio
         voice = update.message.voice if update.message.voice else update.message.audio
@@ -53,7 +60,8 @@ class ChatBot:
         ext = filename.split('.')[-1]
 
         # convert .oga to .mp3
-        audio = AudioSegment.from_file(f"downloads/{filename}", format="ogg" if ext == "oga" else None)
+        audio = AudioSegment.from_file(
+            f"downloads/{filename}", format="ogg" if ext == "oga" else None)
 
         # Export the audio to the desired format
         buffer = BytesIO()
@@ -64,7 +72,7 @@ class ChatBot:
         add_history("Transcript of file voice.mp3:\n" + transcript["text"])
 
         # send the transcript back
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=transcript["text"])
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Transcript:\n" + transcript["text"])
 
     def start(self):
         self.app.run_polling()
@@ -73,10 +81,7 @@ class ChatBot:
 def main():
     bot = ChatBot()
     bot.start()
-    # keep the program running
-    while 1:
-        time.sleep(10)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())

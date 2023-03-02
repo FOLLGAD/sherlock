@@ -8,9 +8,9 @@ def add_history(text, role="user"):
     messagehistory.append({"role": role, "content": text})
 
 
-def chat(text):
+async def chat(text):
     add_history(text)
-    ans = openai.ChatCompletion.create(
+    ans = await openai.ChatCompletion.acreate(
         model="gpt-3.5-turbo",
         messages=messagehistory,
     )
