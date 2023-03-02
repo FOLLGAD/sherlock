@@ -1,0 +1,4 @@
+.env
+downloads/*
+!downloads/.gitkeep
+*.pyc
