@@ -17,3 +17,5 @@ Create a `.env` file with contents:
 TELEGRAM_BOT_TOKEN=123123123:xxxxxx
 OPENAI_API_KEY=sk-xxxxxx
 ```
+
+Then install the required packages and run `telegram-bot.py`
