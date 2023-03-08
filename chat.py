@@ -6,6 +6,7 @@ preprompts = [
 messagehistory = []
 
 def add_history(text, role="user"):
+    global messagehistory
     messagehistory.append({"role": role, "content": text})
     if len(messagehistory) > 6:
         messagehistory = messagehistory[-6:]
