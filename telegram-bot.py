@@ -87,7 +87,7 @@ class ChatBot:
         self.app.run_polling()
 
 
-def main():
+async def main():
     bot = ChatBot()
     bot.start()
 
