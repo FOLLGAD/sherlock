@@ -3,6 +3,14 @@ from typing import Tuple
 
 LIGHTS_ENTITY_ID = "light.disco_group"
 
+boolmap = {
+    True: "on",
+    False: "off",
+
+    None: "on",
+}
+
+
 def lights(state: bool, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None):
     arg_list = []
     if state:
@@ -18,30 +26,33 @@ def lights(state: bool, brightness_percent: int | None = None, brightness_step: 
     extra_args = "".join(arg_list)
     subprocess.call(
         [
-        "hass-cli", "service",
-        "call", f"light.turn_{'on' if state else 'off'}",
-        "--arguments", f"entity_id={LIGHTS_ENTITY_ID}{extra_args}",
+            "hass-cli", "service",
+            "call", f"light.turn_{boolmap[state]}",
+            "--arguments", f"entity_id={LIGHTS_ENTITY_ID}{extra_args}",
         ]
     )
-    print("Lights turned", "on" if state else "off", extra_args)
+    print("Lights turned", boolmap[state], extra_args)
+
 
 def cringe_alert(state):
     # hass-cli state turn_on script.cringe_alert
     subprocess.call(
         [
             "hass-cli", "state",
-            f"turn_{'on' if state else 'off'}", "script.cringe_alert",
+            f"turn_{boolmap[state]}", "script.cringe_alert",
         ]
     )
+
 
 def disco_mode(state):
     # hass-cli state turn_on input_boolean.disco_mode
     subprocess.call(
         [
             "hass-cli", "state",
-            f"turn_{'on' if state else 'off'}", "input_boolean.disco_mode",
+            f"turn_{boolmap[state]}", "input_boolean.disco_mode",
         ]
     )
+
 
 def play_music():
     # play music

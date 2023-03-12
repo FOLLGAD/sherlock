@@ -16,7 +16,7 @@ Available functions:
     """},
     {"role": "user", "content": "turn on the lights"},
     {"role": "assistant", "content": """
-```python
+```python(homeassistant)
 lights(True)
 ```
 The lights have been turned on.
@@ -46,16 +46,28 @@ async def chat(text):
 
     # remove the python code and store in variable (can be located anywhere in response)
     if "```python" in m.content:
-        split = m.content.split("```python")
+        split = m.content.split("```python(homeassistant)")
         code = split[1].split("```")[0].strip()
         content = split[0] + split[1].split("```")[1]
         # execute code (warning: prob not very safe)
         print("Executing code:", code)
-        exec(
-            "from home import lights, cringe_alert, play_music, disco_mode" +
-            "\n" +
-            code
-        )
+        try:
+            exec(
+                f"""
+    # timeout after 10 seconds
+    import signal
+    def signal_handler(signum, frame):
+        raise Exception("Timed out!")
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(10)
+
+    # execute code
+    from home import lights, cringe_alert, play_music, disco_mode
+    {code}
+    """
+            )
+        except Exception as e:
+            print("Error executing code:", e)
         print("Executed code.")
 
     return content
