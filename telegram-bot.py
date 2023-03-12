@@ -36,12 +36,15 @@ class ChatBot:
         open(f"downloads/{filename}", 'wb').write(r.content)
         return filename
 
-    async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        task = asyncio.create_task(chat(update.message.text))
+    async def respond_to_text(self, message: str, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        task = asyncio.create_task(chat(message))
+        asyncio.create_task(context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing"))
         await asyncio.sleep(0)
 
-        await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
         await context.bot.send_message(chat_id=update.effective_chat.id, text=await task)
+
+    async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        await self.respond_to_text(update.message.text, update, context)
 
     async def handle_photo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Photo received!")
@@ -68,13 +71,19 @@ class ChatBot:
         file_obj = BytesIOWithName(buffer.getvalue(), "voice.mp3")
 
         transcript = openai.Audio.transcribe("whisper-1", file_obj)
-        add_history("Transcript of file voice.mp3:\n" + transcript["text"])
+        transcript = transcript["text"]
 
         # remove file
         os.remove(f"downloads/{filename}")
 
         # send the transcript back
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Transcript:\n" + transcript["text"])
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Transcript:\n" + transcript)
+
+        if update.message.voice is not None:
+            await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
+            
+            # respond to the transcript
+            await self.respond_to_text(transcript, update, context)
 
     def start(self):
         self.app.run_polling()

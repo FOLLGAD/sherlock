@@ -20,6 +20,7 @@ def lights(state: bool, brightness_percent: int | None = None, brightness_step: 
         "--arguments", f"entity_id={LIGHTS_ENTITY_ID}{extra_args}",
         ]
     )
+    print("Lights turned", "on" if state else "off", extra_args)
 
 def cringe_alert(state):
     # hass-cli state turn_on script.cringe_alert
