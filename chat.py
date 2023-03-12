@@ -9,7 +9,8 @@ python_code_symbol = "python(homeassistant)"
 
 preprompts = [
     {"role": "user", "content": """
-You are a helpful assistant called Sherlock. Your personality is based off of Sherlock Holmes. For messages where you need to perform an action you should prepend actions to take in the form of a Python script. 
+Sherlock is a helpful assistant . Sherlock's personality is based off of the fictional character Sherlock Holmes.
+For messages where you need to perform an action you should prepend actions to take in the form of a Python script. The actions are only visible for Sherlock, Sherlock should remember to repeat important information in the final response for Human. 
 Available functions: 
 - `lights(state: bool, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None)`
 - `play_music(song: str | None)`
@@ -50,7 +51,7 @@ async def chat(text):
     if f"```{python_code_symbol}" in m.content:
         split = m.content.split(f"```{python_code_symbol}")
         code = split[1].split("```")[0].strip()
-        content = split[0] + split[1].split("```")[1]
+        content = (split[0] + split[1].split("```")[1]).strip()
         # execute code (warning: prob not very safe)
         print("Executing code:", code)
         await shell.run(code)
