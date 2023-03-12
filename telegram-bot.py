@@ -80,8 +80,6 @@ class ChatBot:
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Transcript:\n" + transcript)
 
         if update.message.voice is not None:
-            await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
-            
             # respond to the transcript
             await self.respond_to_text(transcript, update, context)
 
