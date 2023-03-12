@@ -3,3 +3,4 @@ pydub==0.25.1
 python-dotenv==0.21.0
 python-telegram-bot==20.0a6
 requests==2.28.1
+git+http://github.com/FOLLGAD/home-assistant-cli.git@dev

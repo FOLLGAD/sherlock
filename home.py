@@ -11,7 +11,7 @@ def lights(state: bool, brightness_percent: int | None = None, brightness_step: 
         if brightness_step is not None:
             arg_list.append(f",brightness_step={brightness_step}")
         if rgbww is not None:
-            arg_list.append(f",rgbww='{list(rgbww)}'")
+            arg_list.append(f",rgbww_color='{list(rgbww)}'")
     extra_args = "".join(arg_list)
     subprocess.call(
         [
