@@ -2,7 +2,6 @@ from telegram.ext import ContextTypes, MessageHandler, filters, ApplicationBuild
 from io import BytesIO
 import openai
 import requests
-import time
 import os
 import asyncio
 from pydub import AudioSegment
@@ -70,6 +69,9 @@ class ChatBot:
 
         transcript = openai.Audio.transcribe("whisper-1", file_obj)
         add_history("Transcript of file voice.mp3:\n" + transcript["text"])
+
+        # remove file
+        os.remove(f"downloads/{filename}")
 
         # send the transcript back
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Transcript:\n" + transcript["text"])
