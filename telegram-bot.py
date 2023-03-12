@@ -88,14 +88,10 @@ class ChatBot:
         self.app.run_polling()
 
 
-async def main():
+def main():
     bot = ChatBot()
     bot.start()
 
-    while True:
-        # keep the bot running
-        await asyncio.sleep(1)
-
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()
