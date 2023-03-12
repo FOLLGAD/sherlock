@@ -56,5 +56,6 @@ async def chat(text):
             "\n" +
             code
         )
+        print("Executed code.")
 
     return content

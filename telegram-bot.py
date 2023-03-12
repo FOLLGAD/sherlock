@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from telegram import Update
 
 from buf import BytesIOWithName
-from chat import add_history, chat
+from chat import chat
 load_dotenv()
 
 # import openai
