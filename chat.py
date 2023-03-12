@@ -54,17 +54,17 @@ async def chat(text):
         try:
             exec(
                 f"""
-    # timeout after 10 seconds
-    import signal
-    def signal_handler(signum, frame):
-        raise Exception("Timed out!")
-    signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(10)
+# timeout after 10 seconds
+import signal
+def signal_handler(signum, frame):
+    raise Exception("Timed out!")
+signal.signal(signal.SIGALRM, signal_handler)
+signal.alarm(10)
 
-    # execute code
-    from home import lights, cringe_alert, play_music, disco_mode
-    {code}
-    """
+# execute code
+from home import lights, cringe_alert, play_music, disco_mode
+{code}
+"""
             )
         except Exception as e:
             print("Error executing code:", e)
