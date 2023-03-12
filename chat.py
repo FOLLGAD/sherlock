@@ -53,7 +53,7 @@ async def chat(text):
         content = split[0] + split[1].split("```")[1]
         # execute code (warning: prob not very safe)
         print("Executing code:", code)
-        shell.run(code)
+        await shell.run(code)
         print("Executed code.")
 
     return content
