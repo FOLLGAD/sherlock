@@ -1,4 +1,4 @@
-import asyncio
+import shell
 from openai import ChatCompletion
 
 # to add:
@@ -53,23 +53,7 @@ async def chat(text):
         content = split[0] + split[1].split("```")[1]
         # execute code (warning: prob not very safe)
         print("Executing code:", code)
-        try:
-            asyncio.subprocess.create_subprocess_exec(
-                f"""
-# timeout after 10 seconds
-import signal
-def signal_handler(signum, frame):
-    raise Exception("Timed out!")
-signal.signal(signal.SIGALRM, signal_handler)
-signal.alarm(10)
-
-# execute code
-from home import lights, cringe_alert, play_music, disco_mode
-{code}
-"""
-            )
-        except Exception as e:
-            print("Error executing code:", e)
+        shell.run(code)
         print("Executed code.")
 
     return content
