@@ -38,7 +38,8 @@ class ChatBot:
 
     async def respond_to_text(self, message: str, update: Update, context: ContextTypes.DEFAULT_TYPE):
         task = asyncio.create_task(chat(message))
-        asyncio.create_task(context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing"))
+        asyncio.create_task(context.bot.send_chat_action(
+            chat_id=update.effective_chat.id, action="typing"))
         await asyncio.sleep(0)
 
         await context.bot.send_message(chat_id=update.effective_chat.id, text=await task)
@@ -90,6 +91,10 @@ class ChatBot:
 async def main():
     bot = ChatBot()
     bot.start()
+
+    while True:
+        # keep the bot running
+        await asyncio.sleep(1)
 
 
 if __name__ == '__main__':
