@@ -10,8 +10,10 @@ boolmap = {
     None: "on",
 }
 
+# todo: add a map for the lights for more granular control
 
-def lights(state: bool, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None):
+
+def lights(state: bool | None = None, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None):
     arg_list = []
     if state:
         if brightness_percent is not None:
