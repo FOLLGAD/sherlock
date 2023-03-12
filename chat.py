@@ -1,9 +1,11 @@
+import asyncio
 from openai import ChatCompletion
 
 # to add:
 # - add_note (connect to notion db maybe)
 # - report_emotion (also connect to notion db)
 
+python_code_symbol = "python(homeassistant)"
 
 preprompts = [
     {"role": "user", "content": """
@@ -15,8 +17,8 @@ Available functions:
 - `cringe_alert(state: bool)`
     """},
     {"role": "user", "content": "turn on the lights"},
-    {"role": "assistant", "content": """
-```python(homeassistant)
+    {"role": "assistant", "content": f"""
+```{python_code_symbol}
 lights(True)
 ```
 The lights have been turned on.
@@ -45,14 +47,14 @@ async def chat(text):
     messagehistory.append(m)
 
     # remove the python code and store in variable (can be located anywhere in response)
-    if "```python" in m.content:
-        split = m.content.split("```python(homeassistant)")
+    if f"```{python_code_symbol}" in m.content:
+        split = m.content.split(f"```{python_code_symbol}")
         code = split[1].split("```")[0].strip()
         content = split[0] + split[1].split("```")[1]
         # execute code (warning: prob not very safe)
         print("Executing code:", code)
         try:
-            exec(
+            asyncio.subprocess.create_subprocess_exec(
                 f"""
 # timeout after 10 seconds
 import signal
