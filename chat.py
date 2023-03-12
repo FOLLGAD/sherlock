@@ -51,10 +51,9 @@ async def chat(text):
         content = split[0] + split[1].split("```")[1]
         # execute code (warning: prob not very safe)
         exec(
-            f"""
-            from home import lights, cringe_alert, play_music, disco_mode
-            {code}
-            """
+            "from home import lights, cringe_alert, play_music, disco_mode" +
+            "\n" +
+            code
         )
 
     return content
