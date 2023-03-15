@@ -13,9 +13,10 @@ boolmap = {
 # todo: add a map for the lights for more granular control
 
 
-def lights(state: bool | None = None, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None):
+def lights(entity_id: str, brightness_percent: int | None = None, brightness_step: int | None = None, rgbww: Tuple[int, int, int, int, int] | None = None):
     arg_list = []
-    if state:
+    state = True
+    if brightness_percent != 0:
         if brightness_percent is not None:
             arg_list.append(f",brightness_pct={brightness_percent}")
         if brightness_step is not None:
@@ -25,6 +26,8 @@ def lights(state: bool | None = None, brightness_percent: int | None = None, bri
             # pad with 0s
             vals += [0] * (5 - len(vals))
             arg_list.append(f",rgbww_color='{vals}'")
+    else:
+        state = False
     extra_args = "".join(arg_list)
     subprocess.call(
         [
