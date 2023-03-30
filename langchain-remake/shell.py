@@ -17,7 +17,7 @@ from home import lights, cringe_alert, play_music, disco_mode
 """
     program = shlex.quote(program)
 
-    proc = await asyncio.create_subprocess_shell(f"python -c {program}")
+    proc = await asyncio.create_subprocess_shell(f"python3 -c {program}")
     task = asyncio.create_task(proc.wait())
     await asyncio.sleep(0)
     
