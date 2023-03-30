@@ -1,11 +1,19 @@
 import shell
 from openai import ChatCompletion
+from langchain.llms import OpenAI
+
+llm = OpenAI()
 
 # to add:
 # - add_note (connect to notion db maybe)
 # - report_emotion (also connect to notion db)
 
-python_code_symbol = "python(homeassistant)"
+# scratchpad:
+# llm-memory where it can write stuff and remove stuff.
+# e.g if i add a command it writes info on how to do it there.
+
+
+python_code_symbol = "python(sherlock)"
 
 preprompts = [
     {"role": "user", "content": """
@@ -19,10 +27,10 @@ Available functions:
     """},
     {"role": "user", "content": "turn on the lights"},
     {"role": "assistant", "content": f"""
-```{python_code_symbol}
+Action: ```{python_code_symbol}
 lights(True)
 ```
-The lights have been turned on.
+Response: The lights have been turned on.
 """},
 ]
 messagehistory = []
@@ -49,7 +57,7 @@ async def chat(text):
 
     # remove the python code and store in variable (can be located anywhere in response)
     if f"```{python_code_symbol}" in m.content:
-        split = m.content.split(f"```{python_code_symbol}")
+        split = m.content.split(f"Action: ```{python_code_symbol}")
         code = split[1].split("```")[0].strip()
         content = (split[0] + split[1].split("```")[1]).strip()
         # execute code (warning: prob not very safe)
