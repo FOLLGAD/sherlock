@@ -10,9 +10,6 @@ def signal_handler(signum, frame):
     raise Exception("Timed out!")
 signal.signal(signal.SIGALRM, signal_handler)
 signal.alarm(10)
-
-# execute code
-from home import lights, cringe_alert, play_music, disco_mode
 {code}
 """
     program = shlex.quote(program)
