@@ -19,6 +19,14 @@ def music_tool(query: str) -> str:
     print(query)
     return "OK!"
 
+def parse_code(code: str) -> str:
+    if "```python" in code:
+        code = code[code.index("```python") + 9 :]
+        code = code[: code.index("```")]
+    elif "```" in code:
+        code = code[code.index("```") + 3 :]
+        code = code[: code.index("```")]
+    return code
 
 class HomeAssistantTool:
     description = "The user has a Home Assistant setup. This starts the process for changing things like lights, cameras etc. Use this tool whenever the user needs that sort of thing. Has modes and alerts."
@@ -55,7 +63,8 @@ Entities available:
             ]
         )
 
-        code = res.generations[0][0]
+        code = res.generations[0][0].text
+        code = parse_code(code)
         print("CODEEEE", code)
         out = await shell.run(code)
         print(out)
