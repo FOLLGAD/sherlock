@@ -2,15 +2,15 @@ import os
 os.environ["LANGCHAIN_HANDLER"] = "langchain"
 
 from langchain.agents import Tool
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationTokenBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.utilities import SerpAPIWrapper, BashProcess
 from langchain.agents import initialize_agent
 from langchain.agents.tools import Tool
 from tools import music_tool, HomeAssistantTool
 
-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, verbose=True)
+memory = ConversationTokenBufferMemory(memory_key="chat_history", return_messages=True, max_token_limit=1000, llm=llm)
 
 search = SerpAPIWrapper()
 bash = BashProcess()
@@ -33,12 +33,12 @@ tools = [
         coroutine=ha_tool.arun,
         description="The user has a Home Assistant setup. This starts the process for changing things like lights, cameras etc. Use this tool whenever the user needs that sort of thing. Has modes and alerts. The input should be a standalone query containing all context necessary. The command should follow this format: `ENTITY(entity_keyword) Full user command with context`, example: `ENTITY(light) Turn off all lights`"
     ),
-    music_tool,
-    # Tool(
-    #     name = "Play Music",
-    #     func=music_tool,
-    #     description="Useful for playing music. The input to this command should be a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."
-    # ),
+    Tool(
+        name = "Play Music",
+        func=music_tool,
+        coroutine=music_tool,
+        description="Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."
+    ),
 ]
 agent_chain = initialize_agent(tools, llm, agent="chat-conversational-react-description", verbose=True, memory=memory)
 

@@ -1,9 +1,10 @@
 from langchain.agents import tool
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
-import requests
-from ha import ha_entities
+from ha import ha_entities, play_music
+import spotipy
 import shell
+import music
 
 
 @tool("Play Music", return_direct=True)
@@ -13,11 +14,28 @@ def music_tool(query: str) -> str:
     return "OK!"
 
 
-@tool("Play Music", return_direct=True)
-def music_tool(query: str) -> str:
+async def music_tool(query: str) -> str:
     """Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."""
     print(query)
-    return "OK!"
+
+    artist, album, song, playlist = None, None, None, None
+    # parse query as json object
+    try:
+        import json
+        query = json.loads(query)
+        artist = query.get("artist")
+        album = query.get("album")
+        song = query.get("song")
+        playlist = query.get("playlist")
+    except:
+        pass
+    
+    result = music.search(artist=artist, album=album, song=song, playlist=playlist)
+
+    print(artist, album, song, playlist)
+    play_music(result["uri"])
+
+    return query
 
 def parse_code(code: str) -> str:
     if "```python" in code:
@@ -42,7 +60,8 @@ class HomeAssistantTool:
             entity_keyword = query[query.index("ENTITY(") + 7 : query.index(")")]
             query = query.replace(f"ENTITY({entity_keyword})", "")
             all_entities = ha_entities()
-            entities = [e for e in all_entities if entity_keyword.lower() in e.lower()]
+            header = all_entities[0]
+            entities = [header] + [e for e in all_entities[1:] if entity_keyword.lower() in e.lower()]
 
         res = self.llm.generate(
             [
@@ -54,12 +73,16 @@ Write a python script that performs the action using the Home Assistant REST API
 
 Respond with only python code inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so
 Whatever is printed to the console will be sent to the user.
-
-Entities available:
-{entities}
 """
                     ),
                     HumanMessage(content=query),
+                    SystemMessage(content=f"""
+Available Home Assistant entities:
+```
+{entities}
+```
+Based on the query, select an entity that best fits the query and write the code. Assume HASS_SERVER, HASS_TOKEN are already defined.
+"""),
                 ]
             ]
         )

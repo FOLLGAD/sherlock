@@ -9,6 +9,10 @@ def signal_handler(signum, frame):
     raise Exception("Timed out!")
 signal.signal(signal.SIGALRM, signal_handler)
 signal.alarm(10)
+
+import os
+HASS_SERVER = os.environ.get('HASS_SERVER')
+HASS_TOKEN = os.environ.get('HASS_TOKEN')
 {code}
 """
     program = shlex.quote(program)
