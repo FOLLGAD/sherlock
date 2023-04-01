@@ -71,7 +71,7 @@ The user has a Home Assistant setup. This starts the process for changing things
 Write a python script that performs the action using the Home Assistant REST API using python's requests library. Environment variables are defined as HASS_SERVER and HASS_TOKEN.
 
 Respond with only python code inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so
-Whatever is printed to the console will be sent to the user.
+Whatever is printed to the console will be sent to the user. Only print the status code. Do not print the response body.
 """
                     ),
                     HumanMessage(content=query),
