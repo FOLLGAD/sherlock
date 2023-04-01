@@ -89,4 +89,4 @@ Based on the query, select an entity that best fits the query and write the code
         code = res.generations[0][0].text
         code = parse_code(code)
         out = await shell.run(code)
-        return out
+        return f"Command was successful: '{out}'"

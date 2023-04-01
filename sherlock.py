@@ -32,7 +32,7 @@ tools = [
         name="Home Assistant Control",
         func=ha_tool.arun,
         coroutine=ha_tool.arun,
-        description="The user has a Home Assistant setup. This starts the process for changing things like lights, cameras etc. Use this tool whenever the user needs that sort of thing. Has modes and alerts. The input should be a standalone query containing all context necessary. The command should follow this format: `ENTITY(entity_keyword) Full user command with context`, example: `ENTITY(light) Turn off all lights`",
+        description="The user has a Home Assistant setup. This starts the process for changing things like lights, cameras etc. Use this tool whenever the user needs that sort of thing. Has modes and alerts. The input should be a standalone query containing all context necessary. The command should follow this format: `ENTITY(entity_keyword) Full user command with context`, example: `ENTITY(light) Turn off all lights`. Important: ENTITY(keyword) must be included!",
     ),
     Tool(
         name="Play Music",
@@ -47,10 +47,10 @@ tools = [
         description="Run a bash command on the host computer. Might have side effects.",
     ),
     Tool(
-        name="Ask a politician and trusted news source",
+        name="Ask a newspaper",
         func=search.run,
         coroutine=asyncify(search.run),
-        description="Use when you need to answer specific questions about current events or the current state of the world. The input to this should be a standalone query and search term. Don't copy the response ad-verbatim, but use it as a starting point for your own response.",
+        description="Use when you need to answer specific questions about world events or the current state of the world. The input to this should be a standalone query and search term. Don't copy the response ad-verbatim, but use it as a starting point for your own response.",
     ),
 ]
 agent_chain = initialize_agent(
@@ -90,6 +90,7 @@ async def ask_sherlock(human_input: str, user_id: str) -> str:
         ]
     )
     db.update_user_last_output(user_id, new_context_as_str)
+    return ai_output
 
 
 async def loop():

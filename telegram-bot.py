@@ -5,18 +5,14 @@ import requests
 import os
 import asyncio
 from pydub import AudioSegment
+from sherlock import ask_sherlock
 
 # import env variables
 from dotenv import load_dotenv
 from telegram import Update
 
 from buf import BytesIOWithName
-from chat import chat
 load_dotenv()
-
-# import openai
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 
 class ChatBot:
     app: Application = None
@@ -37,7 +33,7 @@ class ChatBot:
         return filename
 
     async def respond_to_text(self, message: str, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        task = asyncio.create_task(chat(message))
+        task = asyncio.create_task(ask_sherlock(message, update.effective_chat.id))
         asyncio.create_task(context.bot.send_chat_action(
             chat_id=update.effective_chat.id, action="typing"))
         await asyncio.sleep(0)
@@ -48,7 +44,7 @@ class ChatBot:
         await self.respond_to_text(update.message.text, update, context)
 
     async def handle_photo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Photo received!")
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Photo received! 🍄")
 
     async def handle_audio(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         # use whisper to transcribe audio
