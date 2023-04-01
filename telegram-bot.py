@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+
+# import env variables
+from dotenv import load_dotenv
+load_dotenv()
+
 from telegram.ext import ContextTypes, MessageHandler, filters, ApplicationBuilder, Application
 from io import BytesIO
 import openai
@@ -7,12 +13,9 @@ import asyncio
 from pydub import AudioSegment
 from sherlock import ask_sherlock
 
-# import env variables
-from dotenv import load_dotenv
 from telegram import Update
 
 from buf import BytesIOWithName
-load_dotenv()
 
 class ChatBot:
     app: Application = None
