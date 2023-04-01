@@ -33,9 +33,13 @@ async def music_tool(query: str) -> str:
     result = music.search(artist=artist, album=album, song=song, playlist=playlist)
 
     print(artist, album, song, playlist)
-    play_music(result["uri"])
+    print(result["uri"], result["name"])
+    res = play_music(result["uri"])
+    if res != 200:
+        print(res)
+        return "Failed"
 
-    return query
+    return "Success!"
 
 def parse_code(code: str) -> str:
     if "```python" in code:

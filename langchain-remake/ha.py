@@ -18,16 +18,17 @@ def ha_entities():
     return ls
 
 def play_music(spotify_uri: str):
-
     # Construct the API endpoint URL
     play_media_url = f"{url}/api/services/media_player/play_media"
 
     payload = {
-        "entity_id": "media_player.spotify",
+        "entity_id": "media_player.spotify_emil",
         "media_content_id": spotify_uri,
+        "media_content_type": spotify_uri.split(":")[1],
     }
 
     response = requests.post(play_media_url, json=payload, headers=headers)
+    print(response.json())
 
     return response.status_code
 
