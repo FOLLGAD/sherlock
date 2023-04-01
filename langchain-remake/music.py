@@ -13,5 +13,5 @@ def search(artist = None, album = None, song = None, playlist = None):
     query = "\n".join(query)
     search_type = "track" if song is not None else "playlist" if playlist is not None else "album" if album is not None else "artist"
     results = sp.search(q=query, type=search_type, limit=1)
-    return results[search_type+"s"]["items"][0]
+    return results[search_type+"s"]["items"][0], search_type
 

@@ -2,9 +2,9 @@ from langchain.agents import tool
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
 from ha import ha_entities, play_music
-import spotipy
 import shell
 import music
+import json
 
 
 @tool("Play Music", return_direct=True)
@@ -16,12 +16,9 @@ def music_tool(query: str) -> str:
 
 async def music_tool(query: str) -> str:
     """Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."""
-    print(query)
-
     artist, album, song, playlist = None, None, None, None
     # parse query as json object
     try:
-        import json
         query = json.loads(query)
         artist = query.get("artist")
         album = query.get("album")
@@ -30,16 +27,14 @@ async def music_tool(query: str) -> str:
     except:
         pass
     
-    result = music.search(artist=artist, album=album, song=song, playlist=playlist)
+    result, music_type = music.search(artist=artist, album=album, song=song, playlist=playlist)
 
-    print(artist, album, song, playlist)
-    print(result["uri"], result["name"])
     res = play_music(result["uri"])
     if res != 200:
         print(res)
         return "Failed"
 
-    return "Success!"
+    return f"Now playing {music_type} {result['name']}"
 
 def parse_code(code: str) -> str:
     if "```python" in code:
