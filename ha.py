@@ -28,7 +28,6 @@ def play_music(spotify_uri: str):
     }
 
     response = requests.post(play_media_url, json=payload, headers=headers)
-    print(response.json())
 
     return response.status_code
 

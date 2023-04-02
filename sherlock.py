@@ -5,14 +5,16 @@ from langchain.utilities import GoogleSerperAPIWrapper, BashProcess
 from langchain.agents.tools import Tool
 from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
+from agent_parser import SherlockOutputParser
+from prompt import PREFIX, SUFFIX, TEMPLATE_TOOL_RESPONSE
 
 import json
-from tools import music_tool, HomeAssistantTool
+from tools import music_tool, HomeAssistantTool, remove_backticks
 import db
 
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, verbose=True)
 memory = ConversationTokenBufferMemory(
-    memory_key="chat_history", return_messages=True, max_token_limit=1000, llm=llm
+    memory_key="chat_history", return_messages=True, max_token_limit=1600, llm=llm
 )
 
 search = GoogleSerperAPIWrapper()
@@ -25,6 +27,17 @@ def asyncify(fn):
         return fn(query)
 
     return afn
+
+
+async def bash_tool(query):
+    return bash.run(remove_backticks(query))
+
+
+async def search_tool(query):
+    return (
+        search.run(query)
+        + "\n\nImportant note: If none of the above results were helpful, just ignore them!!!"
+    )
 
 
 tools = [
@@ -43,22 +56,29 @@ tools = [
     Tool(
         name="Run a command in terminal",
         func=bash.run,
-        coroutine=asyncify(bash.run),
+        coroutine=bash_tool,
         description="Run a bash command on the host computer. Might have side effects.",
     ),
     Tool(
         name="Ask a newspaper",
         func=search.run,
-        coroutine=asyncify(search.run),
+        coroutine=search_tool,
         description="Use when you need to answer specific questions about world events or the current state of the world. The input to this should be a standalone query and search term. Don't copy the response ad-verbatim, but use it as a starting point for your own response.",
     ),
 ]
+
+parser = SherlockOutputParser()
 agent_chain = initialize_agent(
     tools,
     llm,
     agent="chat-conversational-react-description",
     verbose=True,
     memory=memory,
+    agent_kwargs={
+        "output_parser": parser,
+        "system_message": PREFIX,
+        "human_message": SUFFIX,
+    },
 )
 
 

@@ -7,11 +7,13 @@ import music
 import json
 
 
-@tool("Play Music", return_direct=True)
-def music_tool(query: str) -> str:
-    """Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."""
-    print(query)
-    return "OK!"
+def remove_backticks(query):
+    # query can have 0, 1 or 3 backticks surrounding the command. remove them if they exist
+    if query.startswith("```") and query.endswith("```"):
+        query = query[3:-3]
+    elif query.startswith("`") and query.endswith("`"):
+        query = query[1:-1]
+    return query
 
 
 async def music_tool(query: str) -> str:
@@ -19,15 +21,17 @@ async def music_tool(query: str) -> str:
     artist, album, song, playlist = None, None, None, None
     # parse query as json object
     try:
-        query = json.loads(query)
+        query = json.loads(remove_backticks(query))
         artist = query.get("artist")
         album = query.get("album")
         song = query.get("song")
         playlist = query.get("playlist")
     except:
         pass
-    
-    result, music_type = music.search(artist=artist, album=album, song=song, playlist=playlist)
+
+    result, music_type = music.search(
+        artist=artist, album=album, song=song, playlist=playlist
+    )
 
     res = play_music(result["uri"])
     if res != 200:
@@ -35,6 +39,7 @@ async def music_tool(query: str) -> str:
         return "Failed"
 
     return f"Now playing {music_type} {result['name']}"
+
 
 def parse_code(code: str) -> str:
     if "```python" in code:
@@ -44,6 +49,7 @@ def parse_code(code: str) -> str:
         code = code[code.index("```") + 3 :]
         code = code[: code.index("```")]
     return code
+
 
 class HomeAssistantTool:
     description = "The user has a Home Assistant setup. This starts the process for changing things like lights, cameras etc. Use this tool whenever the user needs that sort of thing. Has modes and alerts."
@@ -60,7 +66,9 @@ class HomeAssistantTool:
             query = query.replace(f"ENTITY({entity_keyword})", "")
             all_entities = ha_entities()
             header = all_entities[0]
-            entities = [header] + [e for e in all_entities[1:] if entity_keyword.lower() in e.lower()]
+            entities = [header] + [
+                e for e in all_entities[1:] if entity_keyword.lower() in e.lower()
+            ]
 
         res = self.llm.generate(
             [
@@ -71,22 +79,26 @@ The user has a Home Assistant setup. This starts the process for changing things
 Write a python script that performs the action using the Home Assistant REST API using python's requests library. Environment variables are defined as HASS_SERVER and HASS_TOKEN.
 
 Respond with only python code inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so
-Whatever is printed to the console will be sent to the user. Only print the status code. Do not print the response body.
+Whatever is printed to the console will be sent to the user. If you want to send a message to the user, use the print function.
 """
                     ),
                     HumanMessage(content=query),
-                    SystemMessage(content=f"""
+                    SystemMessage(
+                        content=f"""
 Available Home Assistant entities:
 ```
 {entities}
 ```
 Based on the query, select an entity that best fits the query and write the code. Assume HASS_SERVER, HASS_TOKEN are already defined.
-"""),
+"""
+                    ),
                 ]
             ]
         )
 
+        print(res.generations[0][0].text)
+
         code = res.generations[0][0].text
         code = parse_code(code)
         out = await shell.run(code)
-        return f"Command was successful: '{out}'"
+        return out
