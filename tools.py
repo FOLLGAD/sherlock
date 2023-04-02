@@ -1,4 +1,3 @@
-from langchain.agents import tool
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
 from ha import ha_entities, play_music
@@ -28,6 +27,9 @@ async def music_tool(query: str) -> str:
         playlist = query.get("playlist")
     except:
         pass
+
+    if not any([artist, album, song, playlist]):
+        return "Error: No music specified"
 
     result, music_type = music.search(
         artist=artist, album=album, song=song, playlist=playlist

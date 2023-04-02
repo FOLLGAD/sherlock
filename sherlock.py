@@ -51,7 +51,7 @@ tools = [
         name="Play Music",
         func=music_tool,
         coroutine=music_tool,
-        description="Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'.",
+        description="Tool used for playing a specific song, artist, album or playlist. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'.",
     ),
     Tool(
         name="Run a command in terminal",
