@@ -84,6 +84,7 @@ agent_chain = initialize_agent(
 
 async def ask_sherlock(human_input: str, user_id: str) -> str:
     context = db.get_last_context(user_id)
+    print("context", context)
     if context is not None:
         context = json.loads(context)
         context = [
