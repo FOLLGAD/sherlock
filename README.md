@@ -68,7 +68,7 @@ $ python sherlock.py
 
 1. Create a bot using the Telegram BotFather and get relevant keys etc.
 
-2. Or start Sherlock as a Telegram bot:
+2. Start Sherlock as a Telegram bot:
 
 ```bash
 $ python telegram-bot.py
