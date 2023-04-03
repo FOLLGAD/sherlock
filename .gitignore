@@ -2,3 +2,5 @@
 downloads/*
 !downloads/.gitkeep
 *.pyc
+.cache
+messages.db
