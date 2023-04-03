@@ -1,21 +1,96 @@
-# Sherlock (GPT-3.5 + Whisper)
+# Sherlock - Your AI Home Assistant Chatbot 🕵🏻‍♂️⚡️
 
-<img width="514" alt="Screenshot 2023-03-02 at 20 11 03" src="https://user-images.githubusercontent.com/1856197/222528112-7409a966-38cf-4f75-9884-8c92c2d4d3d0.png">
+Sherlock is an open-source AI chatbot designed to automate tasks in your home using the power of GPT-3.5 by OpenAI. By interacting with Home Assistant through the Home Assistant REST API, Sherlock can control various smart home devices, execute bash commands, and even transcribe voice commands. The chatbot is accessible through Telegram and can perform online searches using the Google Search Serper API.
 
-## Transcripts
+<img width="514" alt="Sherlock" src="https://user-images.githubusercontent.com/1856197/229633885-aae585a9-1e5b-4225-83a8-c31a09d57b2a.png">
 
-<img width="433" alt="Screenshot 2023-03-02 at 20 08 39" src="https://user-images.githubusercontent.com/1856197/222527666-2a073c3e-b153-468b-b8eb-f8a90ac1e168.png">
+## Table of Contents
 
-## Responding to transcripts
+1. Features
+2. Installation
+3. Configuration
+4. Usage
+5. Contributing
+6. License
 
-<img width="436" alt="Screenshot 2023-03-02 at 20 09 00" src="https://user-images.githubusercontent.com/1856197/222527714-a1575188-9a98-49b4-a696-d23e6a6c9a48.png">
+## Features
 
-## Get started
+- Control smart home devices using Home Assistant REST API
+- Execute bash commands
+- Transcribe voice commands using OpenAI Whisper
+- Interact with Sherlock through Telegram
+- Perform Google searches using the Google Search Serper API
 
-Create a `.env` file with contents:
-```dotenv
-TELEGRAM_BOT_TOKEN=123123123:xxxxxx
-OPENAI_API_KEY=sk-xxxxxx
+## Installation
+
+1. Clone the repository:
+
+```bash
+$ git clone https://github.com/your_username/sherlock.git
 ```
 
-Then install the required packages and run `telegram-bot.py`
+2. Change to the cloned directory:
+
+```bash
+$ cd sherlock
+```
+
+3. Install the required dependencies:
+
+```bash
+$ pip install -r requirements.txt
+```
+
+## Configuration
+
+1. Rename example.env to .env and fill in details:
+
+2. Fill in the required details in .env, including your OpenAI API key, Home Assistant URL and API key, Telegram bot token, and Google Search Serper API key.
+
+## Usage
+
+### CLI Usage
+
+If you want to try it out without Telegram, you can use the command-line interface.
+
+1. Start the Sherlock chatbot as a command-line application:
+
+```bash
+$ python sherlock.py
+```
+
+2. Start interacting with Sherlock by sending text.
+
+### Telegram bot usage
+
+1. Create a bot using the Telegram BotFather and get relevant keys etc.
+
+2. Or start Sherlock as a Telegram bot:
+
+```bash
+$ python telegram-bot.py
+```
+
+3. Open your Telegram app and search for your bot using the bot's username.
+
+4. Start interacting with Sherlock by sending text or voice commands.
+
+Examples:
+
+- Turn on the living room light.
+- Set the thermostat to 72°F.
+- Search for the best smart home security systems.
+- Play Bladee on spotify.
+
+## Contributing
+
+We welcome contributions to help improve Sherlock and make it more accessible to everyone. To contribute, please follow these steps:
+
+- Fork the repository.
+- Create a new branch with a descriptive name.
+- Make your changes and commit them.
+- Open a pull request with a detailed description of your changes.
+
+## License
+
+Sherlock is released under the MIT License.
