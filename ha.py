@@ -27,7 +27,7 @@ def play_music(spotify_uri: str, enqueue: str = "play"):
     play_media_url = f"{url}/api/services/media_player/play_media"
 
     payload = {
-        "entity_id": "media_player.spotify_emil",
+        "entity_id": "all",
         "media_content_id": spotify_uri,
         "media_content_type": spotify_uri.split(":")[1],
         "enqueue": enqueue,
