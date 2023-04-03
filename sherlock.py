@@ -6,7 +6,7 @@ from langchain.agents.tools import Tool
 from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
 from agent_parser import SherlockOutputParser
-from prompt import PREFIX, SUFFIX, TEMPLATE_TOOL_RESPONSE
+from prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
 
 import json
 from tools import music_tool, HomeAssistantTool, remove_backticks
@@ -51,7 +51,7 @@ tools = [
         name="Play Music",
         func=music_tool,
         coroutine=music_tool,
-        description="Tool used for playing a specific song, artist, album or playlist. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'.",
+        description="Tool used for playing a specific song, artist, album or playlist. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'. It must also include the `\"enqueue\": play|add` to decide if it will be added to queue or played now.",
     ),
     Tool(
         name="Run a command in terminal",
@@ -76,8 +76,9 @@ agent_chain = initialize_agent(
     memory=memory,
     agent_kwargs={
         "output_parser": parser,
-        "system_message": PREFIX,
-        "human_message": SUFFIX,
+        "system_message": SYSTEM_MSG,
+        "human_message": HUMAN_MSG,
+        "tool_response": TEMPLATE_TOOL_RESPONSE,
     },
 )
 

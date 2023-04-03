@@ -17,14 +17,16 @@ def remove_backticks(query):
 
 async def music_tool(query: str) -> str:
     """Useful for playing music. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'."""
-    artist, album, song, playlist = None, None, None, None
+    artist, album, song, playlist, enqueue = None, None, None, None, "play"
     # parse query as json object
+    print(query)
     try:
         query = json.loads(remove_backticks(query))
         artist = query.get("artist")
         album = query.get("album")
         song = query.get("song")
         playlist = query.get("playlist")
+        enqueue = query.get("enqueue")
     except:
         pass
 
@@ -35,7 +37,7 @@ async def music_tool(query: str) -> str:
         artist=artist, album=album, song=song, playlist=playlist
     )
 
-    res = play_music(result["uri"])
+    res = play_music(result["uri"], enqueue=enqueue)
     if res != 200:
         print(res)
         return "Failed"
