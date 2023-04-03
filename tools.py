@@ -1,3 +1,5 @@
+from multiprocessing.process import BaseProcess
+from langchain import GoogleSerperAPIWrapper
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
 from ha import ha_entities, play_music
@@ -13,6 +15,19 @@ def remove_backticks(query):
     elif query.startswith("`") and query.endswith("`"):
         query = query[1:-1]
     return query
+
+search = GoogleSerperAPIWrapper()
+bash = BaseProcess()
+
+async def bash_tool(query):
+    return bash.run(remove_backticks(query))
+
+
+async def search_tool(query):
+    return (
+        search.run(query)
+        + "\n\nImportant note: If none of the above results were helpful, just ignore them!!!"
+    )
 
 
 async def music_tool(query: str) -> str:

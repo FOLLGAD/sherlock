@@ -9,7 +9,13 @@ from agent_parser import SherlockOutputParser
 from prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
 
 import json
-from tools import music_tool, HomeAssistantTool, remove_backticks
+from tools import (
+    bash_tool,
+    music_tool,
+    HomeAssistantTool,
+    remove_backticks,
+    search_tool,
+)
 import db
 
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, verbose=True)
@@ -17,27 +23,7 @@ memory = ConversationTokenBufferMemory(
     memory_key="chat_history", return_messages=True, max_token_limit=1600, llm=llm
 )
 
-search = GoogleSerperAPIWrapper()
-bash = BashProcess()
 ha_tool = HomeAssistantTool(llm)
-
-
-def asyncify(fn):
-    async def afn(query):
-        return fn(query)
-
-    return afn
-
-
-async def bash_tool(query):
-    return bash.run(remove_backticks(query))
-
-
-async def search_tool(query):
-    return (
-        search.run(query)
-        + "\n\nImportant note: If none of the above results were helpful, just ignore them!!!"
-    )
 
 
 tools = [
@@ -55,13 +41,13 @@ tools = [
     ),
     Tool(
         name="Run a command in terminal",
-        func=bash.run,
+        func=bash_tool,
         coroutine=bash_tool,
         description="Run a bash command on the host computer. Might have side effects.",
     ),
     Tool(
         name="Ask a newspaper",
-        func=search.run,
+        func=search_tool,
         coroutine=search_tool,
         description="Use when you need to answer specific questions about world events or the current state of the world. The input to this should be a standalone query and search term. Don't copy the response ad-verbatim, but use it as a starting point for your own response.",
     ),
@@ -85,7 +71,6 @@ agent_chain = initialize_agent(
 
 async def ask_sherlock(human_input: str, user_id: str) -> str:
     context = db.get_last_context(user_id)
-    print("context", context)
     if context is not None:
         context = json.loads(context)
         context = [
@@ -115,7 +100,7 @@ async def ask_sherlock(human_input: str, user_id: str) -> str:
     return ai_output
 
 
-async def loop():
+async def cli_mode():
     while True:
         user_id = "id"
         human_input = input("You: ")
@@ -124,6 +109,7 @@ async def loop():
 
 
 if __name__ == "__main__":
+    # CLI mode
     import asyncio
 
-    asyncio.run(loop())
+    asyncio.run(cli_mode())

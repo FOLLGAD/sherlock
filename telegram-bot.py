@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# import env variables
+# import env variables first
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -113,6 +113,7 @@ class ChatBot:
 def main():
     bot = ChatBot()
     bot.start()
+
 
 if __name__ == "__main__":
     main()
