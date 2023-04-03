@@ -22,7 +22,7 @@ from sherlock import ask_sherlock
 
 from telegram import Update
 
-from buf import BytesIOWithName
+from util.buf import BytesIOWithName
 
 
 class ChatBot:

@@ -1,22 +1,20 @@
 from langchain.agents import Tool
 from langchain.memory import ConversationTokenBufferMemory
 from langchain.chat_models import ChatOpenAI
-from langchain.utilities import GoogleSerperAPIWrapper, BashProcess
 from langchain.agents.tools import Tool
 from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
-from agent_parser import SherlockOutputParser
-from prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
+from prompts.agent_parser import SherlockOutputParser
+from prompts.prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
 
 import json
-from tools import (
+from sherlock_tools.tools import (
     bash_tool,
     music_tool,
     HomeAssistantTool,
-    remove_backticks,
     search_tool,
 )
-import db
+import util.db as db
 
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, verbose=True)
 memory = ConversationTokenBufferMemory(

@@ -2,9 +2,9 @@ from multiprocessing.process import BaseProcess
 from langchain import GoogleSerperAPIWrapper
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
-from ha import ha_entities, play_music
-import shell
-import music
+from sherlock_tools.home_assistant import ha_entities, play_music
+import sherlock_tools.shell as shell
+import sherlock_tools.spotify_search as spotify_search
 import json
 
 
@@ -16,8 +16,10 @@ def remove_backticks(query):
         query = query[1:-1]
     return query
 
+
 search = GoogleSerperAPIWrapper()
 bash = BaseProcess()
+
 
 async def bash_tool(query):
     return bash.run(remove_backticks(query))
@@ -48,7 +50,7 @@ async def music_tool(query: str) -> str:
     if not any([artist, album, song, playlist]):
         return "Error: No music specified"
 
-    result, music_type = music.search(
+    result, music_type = spotify_search.search(
         artist=artist, album=album, song=song, playlist=playlist
     )
 

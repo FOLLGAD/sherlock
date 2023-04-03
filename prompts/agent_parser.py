@@ -2,7 +2,7 @@ from typing import Any
 from langchain.agents.conversational_chat.base import (
     AgentOutputParser,
 )
-from prompt import (
+from prompts.prompt import (
     FORMAT_INSTRUCTIONS,
 )
 
