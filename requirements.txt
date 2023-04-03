@@ -1,6 +1,9 @@
-openai==0.27.0
+openai==0.27.2
 pydub==0.25.1
 python-dotenv==0.21.0
 python-telegram-bot==20.0a6
+tiktoken==0.2.0
+git+https://github.com/FOLLGAD/langchain.git
 requests==2.28.1
-git+http://github.com/FOLLGAD/home-assistant-cli.git@dev
+spotipy==2.22.1
+
