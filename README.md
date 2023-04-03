@@ -1,6 +1,6 @@
-# Sherlock - Your AI Home Assistant Chatbot 🕵🏻‍♂️⚡️
+# Sherlock - Home Assistant chatbot 🕵🏻‍♂️⚡️
 
-Sherlock is an open-source AI chatbot designed to automate tasks in your home using the power of GPT-3.5 by OpenAI. By interacting with Home Assistant through the Home Assistant REST API, Sherlock can control various smart home devices, execute bash commands, and even transcribe voice commands. The chatbot is accessible through Telegram and can perform online searches using the Google Search Serper API.
+Sherlock is an open-source AI chatbot designed to automate tasks in your home using the raw power of GPT-3.5 by OpenAI. By interacting with Home Assistant through the Home Assistant REST API, Sherlock can control various smart home devices, execute bash commands, and even transcribe voice commands. The chatbot is accessible through Telegram and can perform online searches using the Google Search Serper API.
 
 <img width="514" alt="Sherlock" src="https://user-images.githubusercontent.com/1856197/229633885-aae585a9-1e5b-4225-83a8-c31a09d57b2a.png">
 
