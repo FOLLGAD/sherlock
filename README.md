@@ -4,6 +4,8 @@ Sherlock is an open-source AI chatbot designed to automate tasks in your home us
 
 <img width="514" alt="Sherlock" src="https://user-images.githubusercontent.com/1856197/229633885-aae585a9-1e5b-4225-83a8-c31a09d57b2a.png">
 
+It can control specific devices without any hardcoding of `entity_ids` etc. It will match the user's query with the available entities on the network, and decide for itself which entity it thinks you mean. For example "turn of the living room lights" might turn off an entity called "light.big_living_room"
+
 ## Table of Contents
 
 1. Features
@@ -16,6 +18,7 @@ Sherlock is an open-source AI chatbot designed to automate tasks in your home us
 ## Features
 
 - Control smart home devices using Home Assistant REST API
+- Play/queue songs using media players connected to Home Assistant
 - Execute bash commands
 - Transcribe voice commands using OpenAI Whisper
 - Interact with Sherlock through Telegram
