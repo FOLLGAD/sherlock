@@ -17,7 +17,6 @@ RUN python -m pip install --no-cache-dir -U pip setuptools wheel && \
     python -m pip install --no-cache-dir -r ${APP_HOME}/requirements.txt
 
 COPY . ${APP_HOME}/
-
 RUN chmod +x ${APP_HOME}/entrypoint.sh
 
 ENTRYPOINT ["sh", "-c", "${APP_HOME}/entrypoint.sh"]
