@@ -15,7 +15,7 @@ def ha_entities():
     entities = response.json()
 
     ls = ["entity_id\tfriendly_name\tstate"] + [
-        f"{e['entity_id']}\t\"{e['attributes']['friendly_name']}\"\t{e['state']}"
+        f"{e['entity_id']}\t\"{e['attributes'].get('friendly_name', '')}\"\t{e['state']}"
         for e in entities
     ]
 
