@@ -4,7 +4,9 @@ Sherlock is an open-source AI chatbot designed to automate tasks in your home us
 
 <img width="514" alt="Sherlock" src="https://user-images.githubusercontent.com/1856197/229633885-aae585a9-1e5b-4225-83a8-c31a09d57b2a.png">
 
-It can control specific devices without any hardcoding of `entity_ids` etc. It will match the user's query with the available entities on the network, and decide for itself which entity it thinks you mean. For example "turn of the living room lights" might turn off an entity called "light.big_living_room"
+It can control specific devices without any hardcoding of `entity_ids` etc. It will match the user's query with the available entities on the network, and decide for itself which entity it thinks you mean. For example "turn of the living room lights" might turn off an entity called "light.big_living_room".
+
+Warning: This tool effectively lets an LLM run arbitrary code on your machine in order to communicate with Home Assistant and other services. Use with caution.
 
 ## Table of Contents
 
