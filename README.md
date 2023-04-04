@@ -85,6 +85,12 @@ Examples:
 - Search for the best smart home security systems.
 - Play Bladee on spotify.
 
+## Contact
+
+If you have any questions, feel free to reach out to me on Twitter: https://twitter.com/emilahlback
+
+Or make an issue here on the repo.
+
 ## Contributing
 
 We welcome contributions to help improve Sherlock and make it more accessible to everyone. To contribute, please follow these steps:
