@@ -4,3 +4,4 @@ downloads/*
 *.pyc
 .cache
 messages.db
+.idea
