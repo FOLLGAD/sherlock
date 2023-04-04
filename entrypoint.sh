@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 echo "start sherlock @ $(pwd)"
 python -V
 python -m telegram-bot
