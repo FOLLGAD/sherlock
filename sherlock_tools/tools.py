@@ -1,4 +1,4 @@
-from multiprocessing.process import BaseProcess
+from langchain.utilities import BashProcess
 from langchain import GoogleSerperAPIWrapper
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, ChatMessage
@@ -18,7 +18,7 @@ def remove_backticks(query):
 
 
 search = GoogleSerperAPIWrapper()
-bash = BaseProcess()
+bash = BashProcess()
 
 
 async def bash_tool(query):
