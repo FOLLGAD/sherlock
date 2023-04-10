@@ -1,7 +1,7 @@
 import os
 from langchain.agents import Tool
 from langchain.memory import ConversationTokenBufferMemory
-from langchain.llms import OpenAIChat
+from langchain.chat_models import ChatOpenAI
 from langchain.agents.tools import Tool
 from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
@@ -16,18 +16,22 @@ from sherlock_tools.tools import (
 )
 import util.db as db
 
-llm = OpenAIChat(
+llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
-    temperature=0.1,
     verbose=True,
+    model_kwargs={
+        "temperature": 0.1,
+    },
 )
 if "PROMPTLAYER_API_KEY" in os.environ:
     from langchain.llms import PromptLayerOpenAIChat
 
     llm = PromptLayerOpenAIChat(
         model_name="gpt-3.5-turbo",
-        temperature=0.1,
         verbose=True,
+        model_kwargs={
+            "temperature": 0.1,
+        },
         pl_tags=["langchain-requests", "chatbot"],
     )
 else:

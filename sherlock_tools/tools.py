@@ -28,7 +28,7 @@ async def bash_tool(query):
 async def search_tool(query):
     return (
         search.run(query)
-        + "\n\nImportant note: If none of the above results were helpful, just ignore them!!!"
+        + "\n\nImportant note: If none of the above results were helpful, feel free to ignore it"
     )
 
 
