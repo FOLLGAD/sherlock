@@ -1,12 +1,12 @@
+import os
 from langchain.agents import Tool
 from langchain.memory import ConversationTokenBufferMemory
-from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAIChat
 from langchain.agents.tools import Tool
 from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
 from prompts.agent_parser import SherlockOutputParser
 from prompts.prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
-
 import json
 from sherlock_tools.tools import (
     bash_tool,
@@ -16,7 +16,19 @@ from sherlock_tools.tools import (
 )
 import util.db as db
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, verbose=True)
+llm =OpenAIChat(
+    model_name="gpt-3.5-turbo",
+    temperature=0.1,
+    verbose=True,
+)
+if "PROMPTLAYER_API_KEY" in os.environ:
+    from langchain.llms import PromptLayerOpenAIChat
+    llm = PromptLayerOpenAIChat(
+        model_name="gpt-3.5-turbo",
+        temperature=0.1,
+        verbose=True,
+        pl_tags=["langchain-requests", "chatbot"],
+    )
 memory = ConversationTokenBufferMemory(
     memory_key="chat_history", return_messages=True, max_token_limit=1600, llm=llm
 )
