@@ -16,19 +16,23 @@ from sherlock_tools.tools import (
 )
 import util.db as db
 
-llm =OpenAIChat(
+llm = OpenAIChat(
     model_name="gpt-3.5-turbo",
     temperature=0.1,
     verbose=True,
 )
 if "PROMPTLAYER_API_KEY" in os.environ:
     from langchain.llms import PromptLayerOpenAIChat
+
     llm = PromptLayerOpenAIChat(
         model_name="gpt-3.5-turbo",
         temperature=0.1,
         verbose=True,
         pl_tags=["langchain-requests", "chatbot"],
     )
+else:
+    print("No PROMPTLAYER_API_KEY found. Using OpenAI instead.")
+
 memory = ConversationTokenBufferMemory(
     memory_key="chat_history", return_messages=True, max_token_limit=1600, llm=llm
 )
