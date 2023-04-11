@@ -3,7 +3,6 @@ from langchain.agents import Tool
 from langchain.memory import ConversationTokenBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.agents.tools import Tool
-from langchain.agents import initialize_agent
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
 from prompts.agent_parser import SherlockOutputParser
 from prompts.prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
@@ -15,11 +14,14 @@ from sherlock_tools.tools import (
     search_tool,
 )
 import util.db as db
+from langchain.agents.agent import AgentExecutor
+from agent import SherlockAgent
 
 llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     verbose=True,
-    model_kwargs={ "temperature": 0.1,
+    model_kwargs={
+        "temperature": 0.1,
     },
 )
 if "PROMPTLAYER_API_KEY" in os.environ:
@@ -70,19 +72,17 @@ tools = [
     ),
 ]
 
-parser = SherlockOutputParser()
-agent_chain = initialize_agent(
-    tools,
-    llm,
-    agent="chat-conversational-react-description",
-    verbose=True,
+agent_chain = AgentExecutor.from_agent_and_tools(
+    SherlockAgent.from_llm_and_tools(
+        llm,
+        tools,
+        system_message=SYSTEM_MSG,
+        human_message=HUMAN_MSG,
+        tool_response=TEMPLATE_TOOL_RESPONSE,
+    ),
+    tools=tools,
     memory=memory,
-    agent_kwargs={
-        "output_parser": parser,
-        "system_message": SYSTEM_MSG,
-        "human_message": HUMAN_MSG,
-        "tool_response": TEMPLATE_TOOL_RESPONSE,
-    },
+    verbose=True,
 )
 
 
