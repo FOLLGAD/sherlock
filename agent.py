@@ -1,4 +1,5 @@
 from __future__ import annotations
+import datetime
 from typing import Any, List, Optional, Sequence, Tuple
 from langchain.agents.agent import Agent
 from langchain.agents.conversational_chat.prompt import (
@@ -68,8 +69,10 @@ class SherlockAgent(Agent):
         )
         if input_variables is None:
             input_variables = ["input", "chat_history", "agent_scratchpad"]
+
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         messages = [
-            SystemMessagePromptTemplate.from_template(system_message),
+            SystemMessagePromptTemplate.from_template(system_message.format(date=date)),
             MessagesPlaceholder(variable_name="chat_history"),
             SystemMessagePromptTemplate.from_template(final_prompt),
             MessagesPlaceholder(variable_name="agent_scratchpad"),
