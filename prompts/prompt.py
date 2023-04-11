@@ -31,7 +31,8 @@ Use this if you want to respond directly to the human. Markdown code snippet for
 ```
 Do I need to use a tool right now? No
 Response: The response to the human
-```"""
+```
+"""
 
 HUMAN_MSG = """
 TOOLS
@@ -41,11 +42,6 @@ You can use any of the following tools to answer my question:
 
 {format_instructions}
 Whenever you have enough information to respond to the query, do so immediately. Remember to ALWAYS follow the response format instructions, otherwise it will crash.
-
-USER'S INPUT
---------------------
-
-Human: {{{{input}}}}
 
 RESPONSE
 --------------------

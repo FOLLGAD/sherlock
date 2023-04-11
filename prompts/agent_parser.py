@@ -34,6 +34,11 @@ class SherlockOutputParser(AgentOutputParser):
                 .replace("Response:", "", 1)
                 .strip(),
             }
+        elif cleaned_output[0].lower().endswith("no"):
+            return {
+                "action": "Final Answer",
+                "action_input": "\n".join(cleaned_output[1:]).strip(),
+            }
         else:
             return {
                 "action": "Final Answer",

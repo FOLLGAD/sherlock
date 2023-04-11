@@ -57,7 +57,7 @@ tools = [
         description="Tool used for playing a specific song, artist, album or playlist. The input to this command should be a string containing a JSON object with at least one of the following keys: 'artist', 'album', 'song', 'playlist'. It must also include the `\"enqueue\": play|add` to decide if it will be added to queue or played now.",
     ),
     Tool(
-        name="Run a command in terminal",
+        name="Bash",
         func=bash_tool,
         coroutine=bash_tool,
         description="Run a bash command on the host computer. Might have side effects.",
@@ -99,7 +99,7 @@ async def ask_sherlock(human_input: str, user_id: str) -> str:
     else:
         context = []
 
-    memory.chat_memory.messages = context
+    memory.chat_memory.messages = context + [HumanMessage(content=human_input)]
 
     db.save_message_to_database(user_id, human_input, user_id)
 
