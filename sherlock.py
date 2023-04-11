@@ -19,14 +19,13 @@ import util.db as db
 llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     verbose=True,
-    model_kwargs={
-        "temperature": 0.1,
+    model_kwargs={ "temperature": 0.1,
     },
 )
 if "PROMPTLAYER_API_KEY" in os.environ:
-    from langchain.llms import PromptLayerOpenAIChat
+    from langchain.chat_models import PromptLayerChatOpenAI
 
-    llm = PromptLayerOpenAIChat(
+    llm = PromptLayerChatOpenAI(
         model_name="gpt-3.5-turbo",
         verbose=True,
         model_kwargs={
@@ -38,7 +37,7 @@ else:
     print("No PROMPTLAYER_API_KEY found. Using OpenAI instead.")
 
 memory = ConversationTokenBufferMemory(
-    memory_key="chat_history", return_messages=True, max_token_limit=1600, llm=llm
+    memory_key="chat_history", return_messages=True, max_token_limit=500, llm=llm
 )
 
 ha_tool = HomeAssistantTool(llm)
@@ -64,7 +63,7 @@ tools = [
         description="Run a bash command on the host computer. Might have side effects.",
     ),
     Tool(
-        name="Ask a newspaper",
+        name="Search on google",
         func=search_tool,
         coroutine=search_tool,
         description="Use when you need to answer specific questions about world events or the current state of the world. The input to this should be a standalone query and search term. Don't copy the response ad-verbatim, but use it as a starting point for your own response.",
