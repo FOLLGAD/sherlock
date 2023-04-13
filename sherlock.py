@@ -99,7 +99,7 @@ async def ask_sherlock(human_input: str, user_id: str) -> str:
     else:
         context = []
 
-    memory.chat_memory.messages = context + [HumanMessage(content=human_input)]
+    memory.chat_memory.messages = context
 
     db.save_message_to_database(user_id, human_input, user_id)
 
