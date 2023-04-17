@@ -100,7 +100,7 @@ The user has a Home Assistant setup. This starts the process for changing things
 Write a python script that performs the action using the Home Assistant REST API using python's requests library. Environment variables are defined as HASS_SERVER and HASS_TOKEN.
 
 Respond with only python code inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so
-Whatever is printed to the console will be sent to the user. If you want to send a message to the user, use the print function. If the request returns empty, the device is probably offline.
+Whatever is printed to the console will be sent to the user. If you want to send a message to the user, use the print function.
 """
                     ),
                     HumanMessage(content=query),
@@ -122,4 +122,4 @@ Based on the query, select an entity that best fits the query and write the code
         code = res.generations[0][0].text
         code = parse_code(code)
         out = await shell.run(code)
-        return out
+        return "Tool output:\n" + out + "\n\nIf the response is empty, the device is probably offline."
