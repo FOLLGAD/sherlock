@@ -87,19 +87,22 @@ agent_chain = AgentExecutor.from_agent_and_tools(
 
 
 async def ask_sherlock(human_input: str, user_id: str) -> str:
-    context = db.get_last_context(user_id)
-    if context is not None:
-        context = json.loads(context)
+    context: list[BaseMessage] = []
+    
+    contextstr = db.get_last_context(user_id)
+    if contextstr is not None:
+        jsoncontext = json.loads(contextstr)
         context = [
             AIMessage(content=msg["m"])
             if msg["s"] == "AI"
             else HumanMessage(content=msg["m"])
-            for msg in context
+            for msg in jsoncontext
         ]
     else:
         context = []
 
     memory.chat_memory.messages = context
+    memory.chat_memory.messages.append(HumanMessage(content=human_input))
 
     db.save_message_to_database(user_id, human_input, user_id)
 
