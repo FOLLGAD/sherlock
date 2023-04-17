@@ -100,7 +100,7 @@ The user has a Home Assistant setup. This starts the process for changing things
 Write a python script that performs the action using the Home Assistant REST API using python's requests library. Environment variables are defined as HASS_SERVER and HASS_TOKEN.
 
 Respond with only python code inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so
-Whatever is printed to the console will be sent to the user. If you want to send a message to the user, use the print function.
+Whatever is printed to the console will be sent to the user. If you want to send a message to the user, use the print function. If the request returns empty, the device is probably offline.
 """
                     ),
                     HumanMessage(content=query),
