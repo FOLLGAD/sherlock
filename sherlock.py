@@ -79,6 +79,7 @@ agent_chain = AgentExecutor.from_agent_and_tools(
         system_message=SYSTEM_MSG,
         human_message=HUMAN_MSG,
         tool_response=TEMPLATE_TOOL_RESPONSE,
+        input_variables=["chat_history", "user_name", "agent_scratchpad"]
     ),
     tools=tools,
     memory=memory,
@@ -86,7 +87,7 @@ agent_chain = AgentExecutor.from_agent_and_tools(
 )
 
 
-async def ask_sherlock(human_input: str, user_id: str) -> str:
+async def ask_sherlock(human_input: str, user_id: str, user_name: str = "a user") -> str:
     context: list[BaseMessage] = []
     
     contextstr = db.get_last_context(user_id)
@@ -106,7 +107,8 @@ async def ask_sherlock(human_input: str, user_id: str) -> str:
 
     db.save_message_to_database(user_id, human_input, user_id)
 
-    ai_output = await agent_chain.arun(input=human_input)
+    ai_output = await agent_chain.arun(user_name=user_name)
+
     db.save_message_to_database(user_id, ai_output, "AI")
 
     msgs: list[BaseMessage] = memory.load_memory_variables({})["chat_history"]

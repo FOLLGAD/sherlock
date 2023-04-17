@@ -26,7 +26,7 @@ from util.buf import BytesIOWithName
 
 
 class ChatBot:
-    app: Application = None
+    app: Application
 
     def __init__(self):
         self.app = ApplicationBuilder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
@@ -47,7 +47,13 @@ class ChatBot:
     async def respond_to_text(
         self, message: str, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        task = asyncio.create_task(ask_sherlock(message, update.effective_chat.id))
+        if update.effective_chat is None:
+            # ignore
+            return
+        
+        name = update.effective_chat.full_name
+
+        task = asyncio.create_task(ask_sherlock(message, str(update.effective_chat.id), name))
         asyncio.create_task(
             context.bot.send_chat_action(
                 chat_id=update.effective_chat.id, action="typing"
@@ -91,7 +97,7 @@ class ChatBot:
         audio.export(buffer, format="mp3")
         file_obj = BytesIOWithName(buffer.getvalue(), "voice.mp3")
 
-        transcript = openai.Audio.transcribe("whisper-1", file_obj)
+        transcript: dict = openai.Audio.transcribe("whisper-1", file_obj)
         transcript = transcript["text"]
 
         # remove file
