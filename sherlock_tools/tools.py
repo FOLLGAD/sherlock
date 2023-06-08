@@ -57,7 +57,7 @@ async def music_tool(query: str) -> str:
     res = play_music(result["uri"], enqueue=enqueue)
     if res != 200:
         print(res)
-        return "Failed"
+        return "Failed with error code " + str(res)
 
     return f"Now playing {music_type} {result['name']}"
 

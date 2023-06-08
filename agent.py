@@ -18,7 +18,7 @@ from langchain.prompts.chat import (
 from langchain.schema import (
     AgentAction,
     AIMessage,
-    BaseLanguageModel,
+    BaseModel,
     BaseMessage,
     BaseOutputParser,
     HumanMessage,
@@ -102,7 +102,7 @@ class SherlockAgent(Agent):
     @classmethod
     def from_llm_and_tools(
         cls,
-        llm: BaseLanguageModel,
+        llm: BaseModel,
         tools: Sequence[BaseTool],
         callback_manager: Optional[BaseCallbackManager] = None,
         system_message: str = PREFIX,

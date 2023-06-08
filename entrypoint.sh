@@ -1,5 +1,5 @@
 #!/bin/bash
 echo "start sherlock @ $(pwd)"
 python -V
-python -m telegram-bot
+python -m main
 echo "done sherlock"

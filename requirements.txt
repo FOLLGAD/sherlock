@@ -3,7 +3,7 @@ pydub==0.25.1
 python-dotenv==0.21.0
 python-telegram-bot==20.0a6
 tiktoken==0.2.0
-langchain==0.1.136
+langchain==0.0.136
 requests==2.28.1
 spotipy==2.22.1
 

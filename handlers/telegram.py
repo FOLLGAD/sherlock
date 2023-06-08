@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-
-# import env variables first
-from dotenv import load_dotenv
-
-load_dotenv()
-
 from telegram.ext import (
     ContextTypes,
     MessageHandler,
@@ -18,7 +11,7 @@ import requests
 import os
 import asyncio
 from pydub import AudioSegment
-from sherlock import ask_sherlock
+from sherlock.sherlock import ask_sherlock
 
 from telegram import Update
 
@@ -112,14 +105,21 @@ class ChatBot:
             # respond to the transcript
             await self.respond_to_text(transcript, update, context)
 
-    def start(self):
-        self.app.run_polling()
+    async def start(self):
+        await self.app.initialize()
+        await self.app.start()
+        await self.app.updater.start_polling()
 
 
-def main():
+async def start():
+    print("Starting Telegram handler...")
     bot = ChatBot()
-    bot.start()
+    try:
+        await bot.start()
+        while True:
+            await asyncio.sleep(1)
+    except KeyboardInterrupt:
+        raise
+    finally:
+        await bot.app.stop()
 
-
-if __name__ == "__main__":
-    main()

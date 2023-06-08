@@ -4,7 +4,6 @@ from langchain.memory import ConversationTokenBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.agents.tools import Tool
 from langchain.schema import BaseMessage, HumanMessage, AIMessage
-from prompts.agent_parser import SherlockOutputParser
 from prompts.prompt import SYSTEM_MSG, HUMAN_MSG, TEMPLATE_TOOL_RESPONSE
 import json
 from sherlock_tools.tools import (
@@ -20,19 +19,14 @@ from agent import SherlockAgent
 llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     verbose=True,
-    model_kwargs={
-        "temperature": 0.1,
-    },
+    temperature=0.1,
 )
 if "PROMPTLAYER_API_KEY" in os.environ:
     from langchain.chat_models import PromptLayerChatOpenAI
 
     llm = PromptLayerChatOpenAI(
         model_name="gpt-3.5-turbo",
-        verbose=True,
-        model_kwargs={
-            "temperature": 0.1,
-        },
+        temperature=0.1,
         pl_tags=["langchain-requests", "chatbot"],
     )
 else:
