@@ -91,19 +91,19 @@ class ChatBot:
         file_obj = BytesIOWithName(buffer.getvalue(), "voice.mp3")
 
         transcript: dict = openai.Audio.transcribe("whisper-1", file_obj)
-        transcript = transcript["text"]
+        transcript_str: str = transcript["text"]
 
         # remove file
         os.remove(f"downloads/{filename}")
 
         # send the transcript back
         await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="Transcript:\n" + transcript
+            chat_id=update.effective_chat.id, text="Transcript:\n" + transcript_str
         )
 
         if update.message.voice is not None:
             # respond to the transcript
-            await self.respond_to_text(transcript, update, context)
+            await self.respond_to_text(transcript_str, update, context)
 
     async def start(self):
         await self.app.initialize()
